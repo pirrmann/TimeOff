@@ -11,4 +11,4 @@ let root =
         [ str "About page" ]
       p
         [ ]
-        [ str "This template is a simple application build with Fable + Elmish + React." ] ]
+        [ str "This is a starter project to use in an F# coding assignment working with Fable + Elmish + React on the front-end, Suave and event-sourcing on the back-end." ] ]

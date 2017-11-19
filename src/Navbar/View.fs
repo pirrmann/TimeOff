@@ -23,9 +23,7 @@ let navButtons =
         [ ClassName "nav-item" ]
         [ div
             [ ClassName "field is-grouped" ]
-            [ navButton "twitter" "https://twitter.com/FableCompiler" "fa-twitter" "Twitter"
-              navButton "github" "https://github.com/fable-compiler/fable-elmish" "fa-github" "Fork me"
-              navButton "github" "https://gitter.im/fable-compiler/Fable" "fa-comments" "Gitter" ] ]
+            [ navButton "github" "https://github.com/pirrmann/TimeOff" "fa-github" "Fork me" ] ]
 
 let root =
     nav
@@ -34,7 +32,7 @@ let root =
             [ ClassName "nav-left" ]
             [ h1
                 [ ClassName "nav-item is-brand title is-4" ]
-                [ str "Elmish" ] ]
+                [ str "Time Off" ] ]
           div
             [ ClassName "nav-right" ]
             [ navButtons ] ]

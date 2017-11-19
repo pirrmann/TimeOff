@@ -1,38 +1,23 @@
-# Fable.Elmish.React Template
+# TimeOff
 
-This template can be used to generate a simple web app with [Fable](http://fable.io/) and [Elmish](https://fable-elmish.github.io/).
-You can find more templates by searching `Fable.Template` packages in [Nuget](https://www.nuget.org).
+This is a starter project to use in an F# coding assignment working with Fable-elmish, Suave and event-sourcing.
 
 ## Requirements
 
 * [dotnet SDK](https://www.microsoft.com/net/download/core) 2.0.0 or higher
-* [node.js](https://nodejs.org) 4.8.2 or higher
-* npm5: JS package manager
-
-Although is not a Fable requirement, on macOS and Linux you'll need [Mono](http://www.mono-project.com/) for other F# tooling like Paket or editor support.
+* [node.js](https://nodejs.org) 6.11 or higher
+* A JS package manager: [yarn](https://yarnpkg.com/) or [npm](http://npmjs.com/)
 
 ## Editor
 
-The project can be used by editors compatible with the new .fsproj format, like VS Code + [Ionide](http://ionide.io/), Emacs with [fsharp-mode](https://github.com/fsharp/emacs-fsharp-mode) or [Rider](https://www.jetbrains.com/rider/). **Visual Studio for Mac** is also compatible but in the current version the package auto-restore function conflicts with Paket so you need to disable it: `Preferences > Nuget > General`.
-
-## Installing the template
-
-In a terminal, run `dotnet new -i Fable.Template.Elmish.React::*` to install or update the template to latest version.
-
-> In some shells you many need quotations: `dotnet new -i "Fable.Template.Elmish.React::*"`. If you use dotnet SDK 2, you should only need to type `dotnet new -i Fable.Template.Elmish.React`.
-
-## Creating a new project with the template
-
-In a terminal, run `dotnet new fable` to create a project in the current directory. Type `dotnet new fable -n MyApp` instead to create a subfolder named `MyApp` and put the new project there.
-
-> The project will have the name of the directory. You may get some issues if the directory name contains some special characters like hyphens
+The project can be used by editors compatible with the new .fsproj format, like VS Code + [Ionide](http://ionide.io/), Emacs with [fsharp-mode](https://github.com/fsharp/emacs-fsharp-mode) or [Rider](https://www.jetbrains.com/rider/)
 
 ## Building and running the app
 
-* Install JS dependencies: `npm install`
+* Install JS dependencies: `yarn install` (or `npm install`)
 * **Move to `src` folder**: `cd src`
 * Install F# dependencies: `dotnet restore`
-* Start Fable daemon and [Webpack](https://webpack.js.org/) dev server: `dotnet fable npm-start`
+* Start Fable daemon and [Webpack](https://webpack.js.org/) dev server: `dotnet fable yarn-start` (or `npm-start`)
 * In your browser, open: http://localhost:8080/
 
 > `dotnet fable yarn-start` (or `npm-start`) is used to start the Fable daemon and run a script in package.json concurrently. It's a shortcut of `yarn-run [SCRIP_NAME]`, e.g. `dotnet fable yarn-run start`.
@@ -69,4 +54,4 @@ Any modification you do to the F# code will be reflected in the web page after s
 
 ### F# source files
 
-The template only contains two F# source files: the project (.fsproj) and a source file (.fs) in `src` folder.
+The source files are in the in the `src` folder.
