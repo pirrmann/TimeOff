@@ -1,0 +1,70 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh Build",
+            "windows": {
+                "command": "${workspaceRoot}/build.cmd Build"
+            },
+            "problemMatcher":"$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build client",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh BuildClient",
+            "windows": {
+                "command": "${workspaceRoot}/build.cmd BuildClient"
+            },
+            "problemMatcher":"$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "Build server",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh BuildServer",
+            "windows": {
+                "command": "${workspaceRoot}/build.cmd BuildServer"
+            },
+            "problemMatcher":"$msCompile",
+            "group": "build"
+        },
+        {
+            "label": "Start & Watch Server (skip dependencies)",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh WatchServer -st",
+            "windows": {
+                "command": "${workspaceRoot}/build.cmd WatchServer -st"
+            },
+            "problemMatcher":"$msCompile",
+            "group": "none"
+        },
+        {
+            "label": "Start & Watch Client (skip dependencies)",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh WatchClient -st",
+            "windows": {
+                "command": "${workspaceRoot}/build.cmd WatchClient -st"
+            },
+            "problemMatcher":"$fable-webpack",
+            "group": "none"
+        },
+        {
+            "label": "Start & Watch both Client & Server (skip dependencies)",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh Run -st",
+            "windows": {
+                "command": "${workspaceRoot}/build.cmd Run -st"
+            },
+            "problemMatcher":"$fable-webpack",
+            "group": "none"
+        }
+    ]
+}

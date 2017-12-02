@@ -1,7 +1,7 @@
 {
   "name": "TimeOff",
   "version": "1.0.0",
-  "description": "Simple Fable App",
+  "description": "TimeOff app",
   "scripts": {
     "build": "webpack -p",
     "start": "webpack-dev-server",

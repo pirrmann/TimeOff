@@ -1,10 +1,10 @@
 # TimeOff
 
-This is a starter project to use in an F# coding assignment working with Fable-elmish, Suave and event-sourcing.
+This is a starter project to use in an F# coding assignment working with Fable-elmish and Suave.
 
 ## Requirements
 
-* [dotnet SDK](https://www.microsoft.com/net/download/core) 2.0.0 or higher
+* [dotnet SDK](https://www.microsoft.com/net/download/core) 2.0.3 or higher
 * [node.js](https://nodejs.org) 6.11 or higher
 * A JS package manager: [yarn](https://yarnpkg.com/) or [npm](http://npmjs.com/)
 
@@ -14,17 +14,13 @@ The project can be used by editors compatible with the new .fsproj format, like 
 
 ## Building and running the app
 
-* Install JS dependencies: `yarn install` (or `npm install`)
-* **Move to `src` folder**: `cd src`
-* Install F# dependencies: `dotnet restore`
-* Start Fable daemon and [Webpack](https://webpack.js.org/) dev server: `dotnet fable yarn-start` (or `npm-start`)
-* In your browser, open: http://localhost:8080/
+In order to build the app, just run the fake build script using either `build.cmd`or `build.sh`
 
-> `dotnet fable yarn-start` (or `npm-start`) is used to start the Fable daemon and run a script in package.json concurrently. It's a shortcut of `yarn-run [SCRIP_NAME]`, e.g. `dotnet fable yarn-run start`.
+If you are using VS Code + [Ionide](http://ionide.io/), you can also use the key combination: Ctrl+Shift+B (Cmd+Shift+B on macOS) instead. This also has the advantage that Fable-specific errors will be highlighted in the editor along with other F# errors.
 
-If you are using VS Code + [Ionide](http://ionide.io/), you can also use the key combination: Ctrl+Shift+B (Cmd+Shift+B on macOS) instead of typing the `dotnet fable yarn-start` command. This also has the advantage that Fable-specific errors will be highlighted in the editor along with other F# errors.
+If you want to run the app in developer mode, just run the fake build script using either `build.cmd Run`or `build.sh Run`. this will built the app and start both the server (Suave for the backend API) and client (Fable app served through webpack), as well as a browser in order to test the client app.
 
-Any modification you do to the F# code will be reflected in the web page after saving. When you want to output the JS code to disk, run `dotnet fable yarn-build` (or `npm-build`) and you'll get a minified JS bundle in the `public` folder.
+Any modification you do to the F# code will be reflected in the web page and the backed after saving, as both of them are started in Watch mode.
 
 ## Project structure
 

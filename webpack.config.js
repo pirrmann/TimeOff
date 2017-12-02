@@ -18,11 +18,12 @@ var babelOptions = fableUtils.resolveBabelOptions({
 });
 
 var isProduction = process.argv.indexOf("-p") >= 0;
+var port = process.env.SUAVE_FABLE_PORT || "8081";
 console.log("Bundling for " + (isProduction ? "production" : "development") + "...");
 
 module.exports = {
     devtool: "source-map",
-    entry: resolve('./src/Client/TimeOff.fsproj'),
+    entry: resolve('./src/Client/Client.fsproj'),
     output: {
         filename: 'bundle.js',
         path: resolve('./public'),
@@ -33,6 +34,12 @@ module.exports = {
         ]
     },
     devServer: {
+        proxy: {
+            '/api/*': {
+                target: 'http://localhost:' + port,
+                changeOrigin: true
+            },
+        },
         contentBase: resolve('./public'),
         port: 8080,
         hot: true,

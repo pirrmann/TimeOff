@@ -1,0 +1,6 @@
+FSharp.Core
+Suave
+Newtonsoft.Json
+Fable.Core
+Fable.JsonConverter
+Microsoft.DotNet.Watcher.Tools
