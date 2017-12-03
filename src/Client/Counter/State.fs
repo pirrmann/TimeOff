@@ -1,4 +1,4 @@
-module Counter.State
+module Client.Counter.State
 
 open Elmish
 open Types

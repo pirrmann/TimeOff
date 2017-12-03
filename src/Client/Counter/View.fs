@@ -1,4 +1,4 @@
-module Counter.View
+module Client.Counter.View
 
 open Fable.Core
 open Fable.Helpers.React
@@ -18,6 +18,7 @@ let userComponent (user: Shared.Types.User option)  =
   | Some user ->
     div [] [ str (sprintf "%s %s" user.Firstname user.Surname) ]
   | None -> div [] []
+
 let root model dispatch =
   div
     [ ClassName "columns is-vcentered" ]

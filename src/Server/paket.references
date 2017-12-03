@@ -1,6 +1,7 @@
 FSharp.Core
 Suave
 Newtonsoft.Json
+jose-jwt
 Fable.Core
 Fable.JsonConverter
 Microsoft.DotNet.Watcher.Tools

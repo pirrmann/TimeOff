@@ -1,4 +1,4 @@
-module Home.Types
+module Client.Home.Types
 
 type Model = string
 

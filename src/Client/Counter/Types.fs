@@ -1,4 +1,4 @@
-module Counter.Types
+module Client.Counter.Types
 
 open Shared.Types
 

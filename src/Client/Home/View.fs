@@ -1,4 +1,4 @@
-module Home.View
+module Client.Home.View
 
 open Fable.Core
 open Fable.Core.JsInterop

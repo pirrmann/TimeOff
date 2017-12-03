@@ -1,4 +1,4 @@
-module Home.State
+module Client.Home.State
 
 open Elmish
 open Types

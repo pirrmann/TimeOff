@@ -1,4 +1,4 @@
-module Counter.Rest
+module Client.Counter.Rest
 
 open Fable.PowerPack
 open Fable.PowerPack.Fetch

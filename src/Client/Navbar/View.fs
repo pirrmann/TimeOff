@@ -1,14 +1,25 @@
-module Navbar.View
+module Client.Navbar.View
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 
-let navButton classy href faClass txt =
+open Client
+open Global
+
+let navButton classy href onclick faClass txt =
     p
         [ ClassName "control" ]
         [ a
-            [ ClassName (sprintf "button %s" classy)
-              Href href ]
+            [
+              yield ClassName (sprintf "button %s" classy) :> IHTMLProp
+              match href with
+              | Some href ->
+                yield Href href :> IHTMLProp
+              | None -> ()
+              match onclick with
+              | Some onclick -> yield OnClick (fun _ -> onclick()) :> IHTMLProp           
+              | None -> ()
+            ]
             [ span
                 [ ClassName "icon" ]
                 [ i
@@ -18,14 +29,20 @@ let navButton classy href faClass txt =
                 [ ]
                 [ str txt ] ] ]
 
-let navButtons =
+let loginStatus (model: NavigationData) dispatch =
     span
         [ ClassName "nav-item" ]
         [ div
             [ ClassName "field is-grouped" ]
-            [ navButton "github" "https://github.com/pirrmann/TimeOff" "fa-github" "Fork me" ] ]
+            [
+                if model.User = None then
+                    yield navButton "" (Some (toHash Login)) None "fa-sign-in" "Login"
+                else
+                    yield navButton "" None (Some (fun () -> dispatch Logout)) "fa-sign-out" "Logout"
+            ]
+        ]
 
-let root =
+let view (model: NavigationData) dispatch =
     nav
         [ ClassName "nav" ]
         [ div
@@ -35,4 +52,4 @@ let root =
                 [ str "Time Off" ] ]
           div
             [ ClassName "nav-right" ]
-            [ navButtons ] ]
+            [ loginStatus model dispatch ] ]

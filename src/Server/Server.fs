@@ -1,12 +1,13 @@
-module TimeOff.Server.App
+module TimeOff.Server.Server
 
 open Shared.Types
 
 open Suave
 open Suave.Operators
 open Suave.Filters
-open Suave.Writers
+open Suave.RequestErrors
 open Suave.Successful
+open Suave.Writers
 
 let user = {
   Id = 1
@@ -18,6 +19,10 @@ let user = {
 let mainWebPart =
   choose [
     GET >=> JSON user
+
+    POST >=> path Shared.ServerUrls.Login >=> Auth.login
+
+    NOT_FOUND "Page not found."
   ]
 
 let config =
