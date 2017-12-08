@@ -4,21 +4,21 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
+open Fulma.Elements
 open Types
 
 let root model dispatch =
   div
     [ ]
-    [ p
-        [ ClassName "control" ]
-        [ input
-            [ ClassName "input"
-              Type "text"
-              Placeholder "Type your name"
-              DefaultValue model
-              AutoFocus true
-              OnChange (fun ev -> !!ev.target?value |> ChangeStr |> dispatch ) ] ]
-      br [ ]
-      span
-        [ ]
-        [ str (sprintf "Hello %s" model) ] ]
+    [ 
+      Heading.h3 [] [ str "Welcome to the TimeOff application." ]
+
+      p [] [ str "Below is an example of a single counter. In order to understand Elmish better, we'll start by transforming this page so that it can handle a list of counters." ]
+
+      br []
+
+      Box.box' []
+        [
+          Client.Counter.View.root model.Counter (CounterMsg >> dispatch)
+        ]
+    ]

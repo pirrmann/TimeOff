@@ -5,14 +5,14 @@ open Shared.Types
 type Page =
   | Home
   | Login
-  | Counter
+  | Balance
   | About
 
 let toHash page =
   match page with
   | About -> "#about"
   | Login -> "#login"
-  | Counter -> "#counter"
+  | Balance -> "#balance"
   | Home -> "#home"
 
 type UserData = 

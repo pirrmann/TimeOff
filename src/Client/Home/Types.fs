@@ -1,6 +1,8 @@
 module Client.Home.Types
 
-type Model = string
+type Model = {
+  Counter: Client.Counter.Types.Model
+}
 
 type Msg =
-  | ChangeStr of string
+  | CounterMsg of Client.Counter.Types.Msg

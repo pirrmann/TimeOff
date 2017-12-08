@@ -17,7 +17,7 @@ let navButton classy href onclick faClass txt =
                 yield Href href :> IHTMLProp
               | None -> ()
               match onclick with
-              | Some onclick -> yield OnClick (fun _ -> onclick()) :> IHTMLProp           
+              | Some onclick -> yield OnClick (fun _ -> onclick()) :> IHTMLProp
               | None -> ()
             ]
             [ span

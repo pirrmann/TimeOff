@@ -14,9 +14,11 @@ type Login =
 open Fable.Core
 
 [<Pojo>]
-type User =
-    { Id : int
-      Firstname: string
-      Surname: string
-      Email: string
-      Password: string }
+type UserVacationBalance = {
+  UserName : string
+  BalanceYear: int
+  CarriedOver: float
+  PortionAccruedToDate: float
+  TakenToDate: float
+  CurrentBalance: float
+}

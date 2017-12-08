@@ -13,6 +13,7 @@
     <Compile Include="JsonConvert.fs" />
     <Compile Include="JsonWebToken.fs" />
     <Compile Include="Auth.fs" />
+    <Compile Include="UserVacation.fs" />
     <Compile Include="Server.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />

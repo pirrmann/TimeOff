@@ -11,24 +11,33 @@ let pageParser: Parser<Page->Page,Page> =
   oneOf [
     map Home (s "home")
     map Login (s "login")
-    map Counter (s "counter")
+    map Balance (s "balance")
     map About (s "about")
   ]
+
+let stayOnCurrentPage model =
+  model, Navigation.modifyUrl (toHash model.Navigation.CurrentPage)
 
 let urlUpdate (result: Option<Page>) model =
   match result with
   | None ->
     Browser.console.error("Error parsing url: " + Browser.window.location.href)
-    model, Navigation.modifyUrl (toHash model.Navigation.CurrentPage)
+    stayOnCurrentPage model
   | Some (Login as page) ->
     let m, cmd = Login.State.init model.Navigation.User
     { model with Navigation = { model.Navigation with CurrentPage = page }; TransientPageModel = LoginModel m }, Cmd.map LoginMsg cmd
+  | Some (Balance as page) ->
+    match model.Navigation.User with
+    | Some user ->
+      let m, cmd = Balance.State.init user None
+      { model with Navigation = { model.Navigation with CurrentPage = page }; TransientPageModel = BalanceModel m }, Cmd.map BalanceMsg cmd
+    | None ->
+      stayOnCurrentPage model
   | Some page ->
     { model with Navigation = { model.Navigation with CurrentPage = page }; TransientPageModel = NoPageModel }, []
 
 let init result =
   let (home, homeCmd) = Home.State.init()
-  let (counter, counterCmd) = Counter.State.init()
   let (model, cmd) =
     urlUpdate result
       {
@@ -38,10 +47,8 @@ let init result =
             CurrentPage = Home
           }
         TransientPageModel = NoPageModel
-        Home = home
-        Counter = counter }
+        Home = home }
   model, Cmd.batch [ cmd
-                     Cmd.map CounterMsg counterCmd
                      Cmd.map HomeMsg homeCmd ]
 
 let loadUser () =
@@ -76,9 +83,11 @@ let update msg model =
 
   | LoginMsg _, _ -> model, Cmd.none
 
-  | CounterMsg msg, _ ->
-    let (counter, counterCmd) = Counter.State.update msg model.Counter
-    { model with Counter = counter }, Cmd.map CounterMsg counterCmd
+  | BalanceMsg msg, BalanceModel balance ->
+    let (balance, balanceCmd) = Balance.State.update msg balance
+    { model with TransientPageModel = BalanceModel balance }, Cmd.map BalanceMsg balanceCmd
+
+  | BalanceMsg _, _ -> model, Cmd.none
 
   | HomeMsg msg, _ ->
     let (home, homeCmd) = Home.State.update msg model.Home

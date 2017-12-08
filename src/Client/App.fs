@@ -16,26 +16,6 @@ importAll "../../sass/main.sass"
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 
-let menuItem label page currentPage =
-    li
-      [ ]
-      [ a
-          [ classList [ "is-active", page = currentPage ]
-            Href (toHash page) ]
-          [ str label ] ]
-
-let menu currentPage =
-  aside
-    [ ClassName "menu" ]
-    [ p
-        [ ClassName "menu-label" ]
-        [ str "General" ]
-      ul
-        [ ClassName "menu-list" ]
-        [ menuItem "Home" Home currentPage
-          menuItem "Counter sample" Counter currentPage
-          menuItem "About" Page.About currentPage ] ]
-
 let root model dispatch =
 
   let pageHtml =
@@ -45,7 +25,10 @@ let root model dispatch =
       match model.TransientPageModel with
       | LoginModel login -> [ Login.View.root login (LoginMsg >> dispatch) ]
       | _ -> []
-    | Counter -> [ Counter.View.root model.Counter (CounterMsg >> dispatch) ]
+    | Balance ->
+      match model.TransientPageModel with
+      | BalanceModel balance -> [ Balance.View.root balance (BalanceMsg >> dispatch) ]
+      | _ -> []
     | Page.About -> [ About.View.root ]
 
   div
@@ -63,7 +46,7 @@ let root model dispatch =
                 [ ClassName "columns" ]
                 [ div
                     [ ClassName "column is-3" ]
-                    [ menu model.Navigation.CurrentPage ]
+                    [ Menu.View.view model.Navigation ]
                   div
                     [ ClassName "column" ]
                     (pageHtml model.Navigation.CurrentPage) ] ] ] ]

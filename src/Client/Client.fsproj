@@ -10,17 +10,21 @@
   <ItemGroup>
     <Compile Include="LocalStorage.fs" />
     <Compile Include="Global.fs" />
+    <Compile Include="Menu/View.fs" />
     <Compile Include="Navbar/View.fs" />
+    <Compile Include="Counter/Types.fs" />
+    <Compile Include="Counter/State.fs" />
+    <Compile Include="Counter/View.fs" />
+    <Compile Include="Balance/Rest.fs" />
+    <Compile Include="Balance/Types.fs" />
+    <Compile Include="Balance/State.fs" />
+    <Compile Include="Balance/View.fs" />
     <Compile Include="Home/Types.fs" />
     <Compile Include="Home/State.fs" />
     <Compile Include="Home/View.fs" />
     <Compile Include="Login/Types.fs" />
     <Compile Include="Login/State.fs" />
     <Compile Include="Login/View.fs" />
-    <Compile Include="Counter/Rest.fs" />
-    <Compile Include="Counter/Types.fs" />
-    <Compile Include="Counter/State.fs" />
-    <Compile Include="Counter/View.fs" />
     <Compile Include="About/View.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="State.fs" />
