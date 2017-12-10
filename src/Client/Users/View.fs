@@ -60,11 +60,18 @@ let userForm (userFormModel: UserFormModel) dispatch =
                                 Input.props [
                                   OnChange (fun ev -> dispatch (SetUserFormLastName !!ev.target?value)) ] ] ] ]
            
-          div [ ClassName "text-center" ] [
-              Button.button_a [Button.isActive; Button.onClick  (fun _ -> dispatch PerformFormActionClicked)] [ str formActionText ]
-          ]
-      ]
-  ]
+          Field.field_div [ Field.isGrouped ]
+            [ Control.control_div [ ]
+                [
+                  Button.button_a [Button.isActive; Button.onClick  (fun _ -> dispatch PerformFormActionClicked)] [ str formActionText ]
+                ]
+              Control.control_div [ ]
+                [
+                  Button.button_a [Button.isActive; Button.onClick  (fun _ -> dispatch CancelClicked)] [ str "Cancel" ]
+                ]
+            ]
+        ]
+    ]
 
 let userList model dispatch =
 
@@ -98,7 +105,7 @@ let userList model dispatch =
             ]
         ]
       
-      Button.button_btn [ Button.isActive; Button.onClick (fun _ -> dispatch CreateUserClicked ) ]
+      Button.button_btn [ Button.isActive; Button.onClick (fun _ -> dispatch CreateNewUserClicked ) ]
         [
           str "Create new user"
         ]
@@ -127,7 +134,7 @@ let mainContent model dispatch =
     ]
   | false, Some userFormModel ->
     [
-      userForm userFormModel dispatch
+      userForm userFormModel (UserFormMsg >> dispatch)
     ]
 
 let root model dispatch =

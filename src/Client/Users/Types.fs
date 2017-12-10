@@ -4,11 +4,19 @@ open Shared.Types
 open Client
 
 type UserFormModel = {
+  UserData: UserData
   Creating: bool
   UserName: string
   FirstName: string
   LastName: string
 }
+
+type UserFormMsg =
+  | SetUserFormUserName of string
+  | SetUserFormFirstName of string
+  | SetUserFormLastName of string
+  | PerformFormActionClicked
+  | CancelClicked
 
 type Model = {
   UserData: UserData
@@ -25,10 +33,8 @@ type Msg =
   | DisplayUserForm of User
   | NetworkError of exn
   | EditUserClicked of string
-  | CreateUserClicked
-  | SetUserFormUserName of string
-  | SetUserFormFirstName of string
-  | SetUserFormLastName of string
-  | PerformFormActionClicked
+  | CreateNewUserClicked
+  | UserFormMsg of UserFormMsg
   | UserSaved of User
+  | CloseUserForm
   | HideNotification
