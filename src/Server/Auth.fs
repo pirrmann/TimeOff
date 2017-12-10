@@ -1,4 +1,4 @@
-module TimeOff.Server.Auth
+namespace TimeOff.Server
 
 open Shared.Types
 
@@ -24,40 +24,47 @@ module private UserDirectory =
         | _ ->
             None
 
-/// Login web part that authenticates a user and returns a token in the HTTP body.
-let login (ctx: HttpContext) = async {
-    let login = 
-        ctx.request.rawForm 
-        |> System.Text.Encoding.UTF8.GetString
-        |> fromJson<Shared.Types.Login>
+type Authentifier (jwtEncoder: JsonWebTokenEncoder) =
+    /// Login web part that authenticates a user and returns a token in the HTTP body.
+    member __.LoginWebPart (ctx: HttpContext) = async {
+        let login = 
+            ctx.request.rawForm 
+            |> System.Text.Encoding.UTF8.GetString
+            |> fromJson<Shared.Types.Login>
 
-    match UserDirectory.authenticate login with
-    | Some userRights ->
-        let token = JsonWebToken.encode userRights
-        let authSuccess = { Role = userRights.Role; Token = token }
-        return! JSON authSuccess ctx
-    | _ -> return! UNAUTHORIZED (sprintf "User '%s' can't be logged in." login.UserName) ctx
-}
+        match UserDirectory.authenticate login with
+        | Some userRights ->
+            let token = jwtEncoder.CreateToken userRights
+            let authSuccess = { Role = userRights.Role; Token = token }
+            return! JSON authSuccess ctx
+        | _ -> return! UNAUTHORIZED (sprintf "User '%s' can't be logged in." login.UserName) ctx
+    }
 
-let private useTokenWithCheck check f ctx = async {
-    match ctx.request.header "Authorization" with
-    | Choice1Of2 accesstoken when accesstoken.StartsWith "Bearer " -> 
-        let jwt = accesstoken.Replace("Bearer ","")
-        match check, JsonWebToken.isValid jwt with
-        | None, Some token  -> // This webpart just requires that you're authenticated
-            return! f token ctx
-        | Some check, Some token when check token -> // This webpart requires authentication and some authorization
-            return! f token ctx
+    /// Extracts the user rights from the token and stores them in the context
+    member __.Authenticate ctx = async {
+        match ctx.request.header "Authorization" with
+        | Choice1Of2 accesstoken when accesstoken.StartsWith "Bearer " -> 
+            let jwt = accesstoken.Replace("Bearer ","")
+            match jwtEncoder.Validate jwt with
+            | Some userRights ->
+                return Some { ctx with userState = ctx.userState.Add("UserRights", userRights) }
+            | _ ->
+                return! FORBIDDEN "Accessing this API is not allowed" ctx
         | _ ->
-            return! FORBIDDEN "Accessing this API is not allowed" ctx
-    | _ ->
-        return! BAD_REQUEST "Request doesn't contain a JSON Web Token" ctx
-}
+            return! BAD_REQUEST "Request doesn't contain a JSON Web Token" ctx
+    }
 
-/// Invokes a function that produces the output for a web part if the HttpContext
-/// contains a valid auth token with the requested Role.
-let useTokenWithRole role = useTokenWithCheck (Some (fun rights -> rights.Role = role))
+module Authorization =
+    let getUserRights ctx =
+        ctx.userState.TryFind "UserRights"
+        |> Option.bind (function | :? UserRights as rights -> Some rights | _ -> None)
+        
+    let withUserRights f ctx = async {
+        match getUserRights ctx with
+        | Some userRights -> return! f userRights ctx
+        | _ -> return! BAD_REQUEST "Request doesn't contain a JSON Web Token" ctx }
 
-/// Invokes a function that produces the output for a web part if the HttpContext
-/// contains a valid auth token.
-let useToken = useTokenWithCheck None
+    let whenUserHasRole role ctx = async {
+        match getUserRights ctx with
+        | Some userRights when userRights.Role = role -> return Some ctx
+        | _ -> return! FORBIDDEN "Accessing this API is not allowed" ctx }
