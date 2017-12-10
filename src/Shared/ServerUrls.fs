@@ -6,4 +6,7 @@ module Shared.ServerUrls
 let Login = "/api/users/login/"
 
 [<Literal>]
+let Users = "/api/users/"
+
+[<Literal>]
 let UserVacation = "/api/vacation/"

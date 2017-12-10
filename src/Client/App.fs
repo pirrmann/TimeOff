@@ -7,7 +7,6 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
 open Fable.Import.Browser
-open Client.Global
 open Client.Types
 open Client.State
 
@@ -23,11 +22,15 @@ let root model dispatch =
     | Home -> [ Home.View.root model.Home (HomeMsg >> dispatch) ]
     | Login ->
       match model.TransientPageModel with
-      | LoginModel login -> [ Login.View.root login (LoginMsg >> dispatch) ]
+      | LoginModel loginModel -> [ Login.View.root loginModel (LoginMsg >> dispatch) ]
       | _ -> []
-    | Balance ->
+    | Balance _ ->
       match model.TransientPageModel with
-      | BalanceModel balance -> [ Balance.View.root balance (BalanceMsg >> dispatch) ]
+      | BalanceModel balanceModel -> [ Balance.View.root balanceModel (BalanceMsg >> dispatch) ]
+      | _ -> []
+    | Users ->
+      match model.TransientPageModel with
+      | UsersModel usersModel -> [ Users.View.root usersModel (UsersMsg >> dispatch) ]
       | _ -> []
     | Page.About -> [ About.View.root ]
 

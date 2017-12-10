@@ -11,7 +11,9 @@ let pageParser: Parser<Page->Page,Page> =
   oneOf [
     map Home (s "home")
     map Login (s "login")
-    map Balance (s "balance")
+    map (Balance << Some) (s "balance" </> str)
+    map (Balance None) (s "balance")
+    map Users (s "users")
     map About (s "about")
   ]
 
@@ -26,11 +28,18 @@ let urlUpdate (result: Option<Page>) model =
   | Some (Login as page) ->
     let m, cmd = Login.State.init model.Navigation.User
     { model with Navigation = { model.Navigation with CurrentPage = page }; TransientPageModel = LoginModel m }, Cmd.map LoginMsg cmd
-  | Some (Balance as page) ->
+  | Some (Balance userName as page) ->
     match model.Navigation.User with
     | Some user ->
-      let m, cmd = Balance.State.init user None
+      let m, cmd = Balance.State.init user userName
       { model with Navigation = { model.Navigation with CurrentPage = page }; TransientPageModel = BalanceModel m }, Cmd.map BalanceMsg cmd
+    | None ->
+      stayOnCurrentPage model
+  | Some (Users as page) ->
+    match model.Navigation.User with
+    | Some user ->
+      let m, cmd = Users.State.init user
+      { model with Navigation = { model.Navigation with CurrentPage = page }; TransientPageModel = UsersModel m }, Cmd.map UsersMsg cmd
     | None ->
       stayOnCurrentPage model
   | Some page ->
@@ -77,17 +86,20 @@ let update msg model =
   | GlobalMsg Logout, _ ->
     model, deleteUserCmd
 
-  | LoginMsg msg, LoginModel login ->
-    let (login, cmd) = Login.State.update LoginMsg saveUserCmd msg login
-    { model with TransientPageModel = LoginModel login }, cmd
-
+  | LoginMsg msg, LoginModel loginModel ->
+    let (loginModel, cmd) = Login.State.update LoginMsg saveUserCmd msg loginModel
+    { model with TransientPageModel = LoginModel loginModel }, cmd
   | LoginMsg _, _ -> model, Cmd.none
 
-  | BalanceMsg msg, BalanceModel balance ->
-    let (balance, balanceCmd) = Balance.State.update msg balance
-    { model with TransientPageModel = BalanceModel balance }, Cmd.map BalanceMsg balanceCmd
-
+  | BalanceMsg msg, BalanceModel balanceModel ->
+    let (balanceModel, balanceCmd) = Balance.State.update msg balanceModel
+    { model with TransientPageModel = BalanceModel balanceModel }, Cmd.map BalanceMsg balanceCmd
   | BalanceMsg _, _ -> model, Cmd.none
+
+  | UsersMsg msg, UsersModel usersModel ->
+    let (usersModel, usersCmd) = Users.State.update msg usersModel
+    { model with TransientPageModel = UsersModel usersModel }, Cmd.map UsersMsg usersCmd
+  | UsersMsg _, _ -> model, Cmd.none
 
   | HomeMsg msg, _ ->
     let (home, homeCmd) = Home.State.update msg model.Home

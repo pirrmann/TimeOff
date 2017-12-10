@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="IRepository.fs" />
+    <Compile Include="IStream.fs" />
+    <Compile Include="Agent/AgentRepository.fs" />
+    <Compile Include="InMemory/InMemoryRepository.fs" />
+    <Compile Include="InMemory/InMemoryStream.fs" />
+    <Compile Include="FileSystem/Serialization.fs" />
+    <Compile Include="FileSystem/DirectoryRepository.fs" />
+    <Compile Include="FileSystem/FileStream.fs" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

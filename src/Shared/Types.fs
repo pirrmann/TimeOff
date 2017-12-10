@@ -11,7 +11,24 @@ type Login =
       Password : string
       PasswordId : Guid }
 
+type UserRole =
+  | Employee
+  | Manager
+  | HumanResources
+ 
+type AuthSuccess = {
+  Token: JWT
+  Role: UserRole
+}
+
 open Fable.Core
+
+[<Pojo>]
+type User = {
+  UserName : string
+  FirstName: string
+  LastName: string
+}
 
 [<Pojo>]
 type UserVacationBalance = {

@@ -15,6 +15,8 @@ let root model dispatch =
 
       p [] [ str "Below is an example of a single counter. In order to understand Elmish better, we'll start by transforming this page so that it can handle a list of counters." ]
 
+      p [] [ str "When the assignement is really started, this page should become a welcome page with links to the most useful features, and the counters code will be removed." ]
+
       br []
 
       Box.box' []

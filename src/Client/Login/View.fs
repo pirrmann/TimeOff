@@ -14,21 +14,12 @@ open Fulma.Elements
 open Fulma.Elements.Form
 open Fulma.Extra.FontAwesome
 
+open Client
 open Types
-
-let [<Literal>] ENTER_KEY = 13.
 
 let root model (dispatch: Msg -> unit) = 
   let buttonActive = if String.IsNullOrEmpty model.Login.UserName || String.IsNullOrEmpty model.Login.Password then Button.isDisabled else Button.isPrimary
 
-  let onEnter msg dispatch =
-    function 
-    | (ev:React.KeyboardEvent) when ev.keyCode = ENTER_KEY ->
-        ev.preventDefault()
-        dispatch msg
-    | _ -> ()
-    |> OnKeyDown
-      
   let notification =
     if not (String.IsNullOrEmpty model.ErrorMsg) then
       Notification.notification [ Notification.isDanger ] [
@@ -54,7 +45,7 @@ let root model (dispatch: Msg -> unit) =
             [ str "Username" ]
           Control.control_div [ Control.hasIconLeft ]
             [ Input.input [ Input.typeIsText
-                            Input.id "password"
+                            Input.id "username"
                             Input.placeholder "Username"
                             Input.defaultValue model.Login.UserName
                             Input.props [
@@ -78,5 +69,5 @@ let root model (dispatch: Msg -> unit) =
        
       div [ ClassName "text-center" ] [
           Button.button_a [buttonActive; Button.onClick  (fun _ -> dispatch ClickLogIn)] [ str "Log In" ]
-      ]                   
+      ]
     ]    

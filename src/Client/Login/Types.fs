@@ -2,7 +2,7 @@ module Client.Login.Types
 
 open Shared
 open Shared.Types
-open Client.Global
+open Client
 
 type LoginState =
     | LoggedOut

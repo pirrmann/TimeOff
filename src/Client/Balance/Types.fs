@@ -1,6 +1,6 @@
 module Client.Balance.Types
 
-open Client.Global
+open Client
 open Shared.Types
 
 type Model = {

@@ -9,13 +9,25 @@ open Suave.RequestErrors
 open Suave.Successful
 open Suave.Writers
 
-let scanSingleStringFormat pattern = new PrintfFormat<(string -> string),unit,string,string,string>(pattern)
+let userRepository =
+  ProtoPersist.FileSystem.DirectoryRepository.Create<string, User>(@"..\..\DB\users", id)
+  |> ProtoPersist.Agent.AgentRepository.Wrap
+
+let usersPart =
+  let restWebPart = RestFul.rest Shared.ServerUrls.Users (scanSingleStringFormat (Shared.ServerUrls.Users + "%s")) userRepository 
+  Auth.useTokenWithRole HumanResources (fun _ -> restWebPart)
 
 let mainWebPart =
   choose [
-    GET >=> pathScan (scanSingleStringFormat (Shared.ServerUrls.UserVacation + "%s")) UserVacation.balanceForUser
 
+    // Login
     POST >=> path Shared.ServerUrls.Login >=> Auth.login
+
+    // Users management
+    pathStarts Shared.ServerUrls.Users >=> usersPart
+
+    // Vacation management
+    GET >=> pathScan (scanSingleStringFormat (Shared.ServerUrls.UserVacation + "%s")) UserVacation.balanceForUser
 
     NOT_FOUND "Page not found."
   ]

@@ -13,5 +13,5 @@ let update msg model =
   | DisplayBalance balance ->
       { model with Balance = Some balance }, []
   | NetworkError error ->
-    printfn "[Counter.State][Network error] %s" error.Message
+    printfn "[Balance.State][Network error] %s" error.Message
     model, Cmd.none

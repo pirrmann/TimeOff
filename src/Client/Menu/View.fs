@@ -5,6 +5,7 @@ open Fable.Helpers.React.Props
 
 open Client
 open Global
+open Shared.Types
 
 let menuItem label page currentPage =
     li
@@ -17,6 +18,7 @@ let menuItem label page currentPage =
 let view (model: NavigationData) =
   let currentPage = model.CurrentPage
   let loggedIn = model.User.IsSome
+  let role = model.User |> Option.map (fun user -> user.Role)
   aside
     [ ClassName "menu" ]
     [ p
@@ -25,6 +27,8 @@ let view (model: NavigationData) =
       ul
         [ ClassName "menu-list" ]
         [ yield menuItem "Home" Home currentPage
+          if role = Some HumanResources then
+            yield menuItem "Users" Users currentPage
           if loggedIn then
-            yield menuItem "Balance" Balance currentPage
+            yield menuItem "Balance" (Balance None) currentPage
           yield menuItem "About" About currentPage ] ]

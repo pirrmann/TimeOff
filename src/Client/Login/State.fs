@@ -9,7 +9,7 @@ open Elmish
 
 open Shared
 open Shared.Types
-open Client.Global
+open Client
 open Client.Login.Types
 
 let authUser (login: Login) =
@@ -26,16 +26,16 @@ let authUser (login: Login) =
             RequestProperties.Body !^body ]
       
       try
-
           let! response = Fetch.fetch ServerUrls.Login props
 
           if not response.Ok then
               return! failwithf "Error: %d" response.Status
-          else    
-              let! token = response.text() 
+          else  
+              let! authSuccess = response.text() |> Promise.map ofJson<AuthSuccess>
               return {
                 UserName = login.UserName
-                Token = token
+                Role = authSuccess.Role
+                Token = authSuccess.Token
               }
       with
       | _ -> return! failwithf "Could not authenticate user."
@@ -49,7 +49,7 @@ let init (user: UserData option) =
           ErrorMsg = "" }, Cmd.none
     | Some user ->
         { Login = { UserName = user.UserName; Password = ""; PasswordId = Guid.NewGuid() }
-          State = LoggedIn { UserName = user.UserName; Token = user.Token }
+          State = LoggedIn { UserName = user.UserName; Role = user.Role; Token = user.Token }
           ErrorMsg = "" }, Cmd.none
 
 let authUserCmd login = 
