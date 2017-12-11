@@ -24,7 +24,17 @@ module private UserDirectory =
         | _ ->
             None
 
-type Authentifier (jwtEncoder: JsonWebTokenEncoder) =
+type ITokenExtractor =
+    abstract member ExtractToken: HttpContext -> string option
+
+type TokenExtractor() =
+    interface ITokenExtractor with
+        member __.ExtractToken ctx =
+            match ctx.request.header "Authorization" with
+            | Choice1Of2 x -> Some x
+            | _ -> None
+
+type Authentifier (tokenExtractor: ITokenExtractor, jwtEncoder: JsonWebTokenEncoder) =
     /// Login web part that authenticates a user and returns a token in the HTTP body.
     member __.LoginWebPart (ctx: HttpContext) = async {
         let login = 
@@ -42,8 +52,8 @@ type Authentifier (jwtEncoder: JsonWebTokenEncoder) =
 
     /// Extracts the user rights from the token and stores them in the context
     member __.Authenticate ctx = async {
-        match ctx.request.header "Authorization" with
-        | Choice1Of2 accesstoken when accesstoken.StartsWith "Bearer " -> 
+        match tokenExtractor.ExtractToken ctx with
+        | Some accesstoken when accesstoken.StartsWith "Bearer " -> 
             let jwt = accesstoken.Replace("Bearer ","")
             match jwtEncoder.Validate jwt with
             | Some userRights ->

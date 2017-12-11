@@ -37,6 +37,29 @@
             "group": "build"
         },
         {
+            "label": "Run all tests",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh RunAllTests",
+            "windows": {
+                "command": "${workspaceRoot}/build.cmd RunAllTests"
+            },
+            "problemMatcher":"$msCompile",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run server tests",
+            "type": "shell",
+            "command": "${workspaceRoot}/build.sh RunServerTests -st",
+            "windows": {
+                "command": "${workspaceRoot}/build.cmd RunServerTests -st"
+            },
+            "problemMatcher":"$msCompile",
+            "group": "test"
+        },
+        {
             "label": "Start & Watch Server (skip dependencies)",
             "type": "shell",
             "command": "${workspaceRoot}/build.sh WatchServer -st",

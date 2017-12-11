@@ -1,0 +1,5 @@
+group ServerTests
+Microsoft.DotNet.Watcher.Tools
+FSharp.Core
+Suave.Testing
+Expecto

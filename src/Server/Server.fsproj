@@ -7,8 +7,6 @@
     <ProjectReference Include="..\ProtoPersist\ProtoPersist.fsproj">
       <Name>ProtoPersist.fsproj</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Shared\Shared.fsproj">
       <Name>Shared.fsproj</Name>
     </ProjectReference>
@@ -22,6 +20,7 @@
     <Compile Include="Restful.fs" />
     <Compile Include="UserVacation.fs" />
     <Compile Include="Server.fs" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -13,8 +13,11 @@ module JsonConvert =
     // as it will create a cache to improve performance
     let jsonConverter = Fable.JsonConverter() :> JsonConverter
 
+    let toJson v =
+        JsonConvert.SerializeObject(v,  [|jsonConverter|])
+
     let JSON v =
-        JsonConvert.SerializeObject(v,  [|jsonConverter|]) |> OK
+        v |> toJson |> OK
 
     let fromJson<'a> json =
         JsonConvert.DeserializeObject<'a>(json, [|jsonConverter|])

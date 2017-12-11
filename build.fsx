@@ -38,6 +38,8 @@ Target "InstallDotNetCore" (fun _ ->
 Target "Clean" (fun _ ->
     !! "/src/**/bin"
     ++ "/src/**/obj"
+    ++ "/tests/**/obj"
+    ++ "/tests/**/obj"
   |> CleanDirs
 )
 
@@ -87,11 +89,21 @@ Target "Run" (fun _ ->
     |> ignore
 )
 
+Target "BuildServerTests" (fun _ ->
+    runDotnet "tests/ServerTests" """build"""
+)
+
+Target "RunServerTests" (fun _ ->
+    runDotnet "tests/ServerTests" "run"
+)
+
 // --------------------------------------------------------------------------------------
 // Build order
 // --------------------------------------------------------------------------------------
 
 Target "All" DoNothing
+
+Target "RunAllTests" DoNothing
 
 Target "Build" DoNothing
 
@@ -114,6 +126,10 @@ Target "Build" DoNothing
 
 "Build" ==> "Run"
 
-"Build" ==> "All"
+"Build"
+  ==> "BuildServerTests"
+  ==> "RunServerTests"
+  ==> "RunAllTests"
+  ==> "All"
 
 RunTargetOrDefault "All"
