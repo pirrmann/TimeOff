@@ -1,4 +1,4 @@
-module Client.Users.View
+module Client.Employees.View
 
 open Fable.Core
 open Fable.Core.JsInterop
@@ -13,8 +13,8 @@ open Client
 open Shared.Types
 open Types
 
-let userForm (userFormModel: UserFormModel) dispatch =
-  let formActionText = if userFormModel.Creating then "Create" else "Save"
+let employeeForm (employeeFormModel: EmployeeFormModel) dispatch =
+  let formActionText = if employeeFormModel.Creating then "Create" else "Save"
   Box.box' []
     [
       form [ ]
@@ -23,18 +23,18 @@ let userForm (userFormModel: UserFormModel) dispatch =
             [ Label.label [ ]
                 [ str "Username" ]
               (
-                if userFormModel.Creating then
+                if employeeFormModel.Creating then
                   Control.control_div [ Control.hasIconLeft ]
                     [ Input.input [ Input.typeIsText
                                     Input.id "username"
                                     Input.placeholder "Username"
-                                    Input.defaultValue userFormModel.UserName
+                                    Input.defaultValue employeeFormModel.UserName
                                     Input.props [
-                                      OnChange (fun ev -> dispatch (SetUserFormUserName !!ev.target?value))
+                                      OnChange (fun ev -> dispatch (SetUserName !!ev.target?value))
                                       AutoFocus true ] ]
                       Icon.faIcon [ Icon.isSmall; Icon.isLeft ] [ Fa.icon Fa.I.User ] ]
                 else
-                  Control.control_p [] [ str userFormModel.UserName ]
+                  Control.control_p [] [ str employeeFormModel.UserName ]
               )
             ]
 
@@ -45,9 +45,9 @@ let userForm (userFormModel: UserFormModel) dispatch =
                 [ Input.input [ Input.typeIsText
                                 Input.placeholder "First name"
                                 Input.id "first-name"
-                                Input.defaultValue userFormModel.FirstName
+                                Input.defaultValue employeeFormModel.FirstName
                                 Input.props [
-                                  OnChange (fun ev -> dispatch (SetUserFormFirstName !!ev.target?value)) ] ] ] ]
+                                  OnChange (fun ev -> dispatch (SetFirstName !!ev.target?value)) ] ] ] ]
 
           Field.field_div [ ]
             [ Label.label [ ]
@@ -56,14 +56,14 @@ let userForm (userFormModel: UserFormModel) dispatch =
                 [ Input.input [ Input.typeIsText
                                 Input.placeholder "Last name"
                                 Input.id "last-name"
-                                Input.defaultValue userFormModel.LastName
+                                Input.defaultValue employeeFormModel.LastName
                                 Input.props [
-                                  OnChange (fun ev -> dispatch (SetUserFormLastName !!ev.target?value)) ] ] ] ]
+                                  OnChange (fun ev -> dispatch (SetLastName !!ev.target?value)) ] ] ] ]
            
           Field.field_div [ Field.isGrouped ]
             [ Control.control_div [ ]
                 [
-                  Button.button_a [Button.isActive; Button.onClick  (fun _ -> dispatch PerformFormActionClicked)] [ str formActionText ]
+                  Button.button_a [Button.isActive; Button.onClick  (fun _ -> dispatch ActionClicked)] [ str formActionText ]
                 ]
               Control.control_div [ ]
                 [
@@ -73,15 +73,15 @@ let userForm (userFormModel: UserFormModel) dispatch =
         ]
     ]
 
-let userList model dispatch =
+let employeeList model dispatch =
 
-  let userLine (user: User) =
+  let employeeLine (employee: Employee) =
     tr [ ]
       [
-        td [] [ a [ OnClick (fun _ -> dispatch (EditUserClicked user.UserName))] [ str user.UserName ] ]
-        td [] [ str user.FirstName ]
-        td [] [ str user.LastName ]
-        td [] [ a [ Href (toHash (Balance (Some user.UserName))) ] [ str "View balance" ] ]
+        td [] [ a [ OnClick (fun _ -> dispatch (EditEmployeeClicked employee.UserName))] [ str employee.UserName ] ]
+        td [] [ str employee.FirstName ]
+        td [] [ str employee.LastName ]
+        td [] [ a [ Href (toHash (Balance (Some employee.UserName))) ] [ str "View balance" ] ]
       ]
 
   div []
@@ -100,41 +100,41 @@ let userList model dispatch =
                   th [] []
                 ]
 
-              for user in model.Users do
-                yield userLine user
+              for employee in model.Employees do
+                yield employeeLine employee
             ]
         ]
       
-      Button.button_btn [ Button.isActive; Button.onClick (fun _ -> dispatch CreateNewUserClicked ) ]
+      Button.button_btn [ Button.isActive; Button.onClick (fun _ -> dispatch CreateNewEmployeeClicked ) ]
         [
-          str "Create new user"
+          str "Create new employee"
         ]
     ]
 
 let mainContent model dispatch =
 
-  match model.Fetching, model.UserForm with
+  match model.Fetching, model.EmployeeForm with
   | true, None ->
     [
       Icon.faIcon [ Icon.isLarge ]
                   [ Fa.icon Fa.I.Spinner
                     Fa.pulse ]
-      str "Loading users"
+      str "Loading employees"
     ]
   | false, None ->
     [
-      userList model dispatch
+      employeeList model dispatch
     ]
-  | true, Some userFormModel ->
+  | true, Some employeeFormModel ->
     [
       Icon.faIcon [ Icon.isLarge ]
                   [ Fa.icon Fa.I.Spinner
                     Fa.pulse ]
-      str (sprintf "Loading details for user %s" userFormModel.UserName)
+      str (sprintf "Loading details for employee %s" employeeFormModel.UserName)
     ]
-  | false, Some userFormModel ->
+  | false, Some employeeFormModel ->
     [
-      userForm userFormModel (UserFormMsg >> dispatch)
+      employeeForm employeeFormModel (EmployeeFormMsg >> dispatch)
     ]
 
 let root model dispatch =

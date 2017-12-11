@@ -22,10 +22,10 @@
     <Compile Include="Balance/Types.fs" />
     <Compile Include="Balance/State.fs" />
     <Compile Include="Balance/View.fs" />
-    <Compile Include="Users/Rest.fs" />
-    <Compile Include="Users/Types.fs" />
-    <Compile Include="Users/State.fs" />
-    <Compile Include="Users/View.fs" />
+    <Compile Include="Employees/Rest.fs" />
+    <Compile Include="Employees/Types.fs" />
+    <Compile Include="Employees/State.fs" />
+    <Compile Include="Employees/View.fs" />
     <Compile Include="Home/Types.fs" />
     <Compile Include="Home/State.fs" />
     <Compile Include="Home/View.fs" />

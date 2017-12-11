@@ -28,9 +28,9 @@ let root model dispatch =
       match model.TransientPageModel with
       | BalanceModel balanceModel -> [ Balance.View.root balanceModel (BalanceMsg >> dispatch) ]
       | _ -> []
-    | Users ->
+    | Employees ->
       match model.TransientPageModel with
-      | UsersModel usersModel -> [ Users.View.root usersModel (UsersMsg >> dispatch) ]
+      | EmployeesModel employeesModel -> [ Employees.View.root employeesModel (EmployeesMsg >> dispatch) ]
       | _ -> []
     | Page.About -> [ About.View.root ]
 

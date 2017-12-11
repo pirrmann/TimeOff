@@ -13,7 +13,7 @@ let pageParser: Parser<Page->Page,Page> =
     map Login (s "login")
     map (Balance << Some) (s "balance" </> str)
     map (Balance None) (s "balance")
-    map Users (s "users")
+    map Employees (s "employees")
     map About (s "about")
   ]
 
@@ -35,11 +35,11 @@ let urlUpdate (result: Option<Page>) model =
       { model with Navigation = { model.Navigation with CurrentPage = page }; TransientPageModel = BalanceModel m }, Cmd.map BalanceMsg cmd
     | None ->
       stayOnCurrentPage model
-  | Some (Users as page) ->
+  | Some (Employees as page) ->
     match model.Navigation.User with
     | Some user ->
-      let m, cmd = Users.State.init user
-      { model with Navigation = { model.Navigation with CurrentPage = page }; TransientPageModel = UsersModel m }, Cmd.map UsersMsg cmd
+      let m, cmd = Employees.State.init user
+      { model with Navigation = { model.Navigation with CurrentPage = page }; TransientPageModel = EmployeesModel m }, Cmd.map EmployeesMsg cmd
     | None ->
       stayOnCurrentPage model
   | Some page ->
@@ -96,10 +96,10 @@ let update msg model =
     { model with TransientPageModel = BalanceModel balanceModel }, Cmd.map BalanceMsg balanceCmd
   | BalanceMsg _, _ -> model, Cmd.none
 
-  | UsersMsg msg, UsersModel usersModel ->
-    let (usersModel, usersCmd) = Users.State.update msg usersModel
-    { model with TransientPageModel = UsersModel usersModel }, Cmd.map UsersMsg usersCmd
-  | UsersMsg _, _ -> model, Cmd.none
+  | EmployeesMsg msg, EmployeesModel employeesModel ->
+    let (employeesModel, employeesCmd) = Employees.State.update msg employeesModel
+    { model with TransientPageModel = EmployeesModel employeesModel }, Cmd.map EmployeesMsg employeesCmd
+  | EmployeesMsg _, _ -> model, Cmd.none
 
   | HomeMsg msg, _ ->
     let (home, homeCmd) = Home.State.update msg model.Home

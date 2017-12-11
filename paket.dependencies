@@ -17,10 +17,9 @@ nuget Suave
 clitool dotnet-fable
 clitool Microsoft.DotNet.Watcher.Tools
 
-group ServerTests
-  source https://nuget.org/api/v2
+group Tests
   storage:none
-  clitool Microsoft.DotNet.Watcher.Tools
+  source https://nuget.org/api/v2
   nuget FSharp.Core redirects: force
   nuget Expecto
   nuget Suave.Testing

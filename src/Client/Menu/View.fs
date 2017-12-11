@@ -28,7 +28,7 @@ let view (model: NavigationData) =
         [ ClassName "menu-list" ]
         [ yield menuItem "Home" Home currentPage
           if role = Some HumanResources then
-            yield menuItem "Users" Users currentPage
+            yield menuItem "Employees" Employees currentPage
           if loggedIn then
             yield menuItem "Balance" (Balance None) currentPage
           yield menuItem "About" About currentPage ] ]

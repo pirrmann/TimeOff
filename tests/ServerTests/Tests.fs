@@ -1,35 +1,35 @@
 module ServerTests.AllTests
 
 open Expecto
-open Scenarios
+open TestsScenarios
 
 open Shared.Types
 
-module UserManagementOnRepository =
-  open UserManagement
+module EmployeeManagementOnRepository =
+  open EmployeeManagement
 
   let runner =
     let run scenario = testCaseAsync scenario.Name <| async {
-      let userRepository = ProtoPersist.InMemory.InMemoryRepository.Create<string, User>()
+      let employeeRepository = ProtoPersist.InMemory.InMemoryRepository.Create<string, Employee>()
       
       for given in scenario.Given do
         match given with
-        | ``A user already exists`` user ->
-          do! userRepository.Create user.UserName user |> Async.Ignore
+        | ``An employee already exists`` employee ->
+          do! employeeRepository.Create employee.UserName employee |> Async.Ignore
 
       let mutable error = false
       try
         match scenario.When with
-        | ``Create a user`` user ->
-          do! userRepository.Create user.UserName user |> Async.Ignore
+        | ``Create an employee`` employee ->
+          do! employeeRepository.Create employee.UserName employee |> Async.Ignore
        with _ ->
          error <- true
 
       for ``then`` in scenario.Then do
         match ``then`` with
-        | ``The user exists`` user ->
-          let! user' = userRepository.Read user.UserName
-          Expect.equal user' (Some user) "The user exists"
+        | ``The employee exists`` employee ->
+          let! employee' = employeeRepository.Read employee.UserName
+          Expect.equal employee' (Some employee) "The employee exists"
         | ``There was an error`` ->
           Expect.isTrue error "There was an error"
     }
@@ -37,11 +37,11 @@ module UserManagementOnRepository =
     { new IScenarioRunner<Given, When, Then> with
       member __.Run(scenario) = run scenario }
 
-module UserManagementOnApi =
+module EmployeeManagementOnApi =
   open Suave
   open Suave.Testing
   open TimeOff.Server
-  open UserManagement
+  open EmployeeManagement
 
   let runner =
     let run scenario = testCaseAsync scenario.Name <| async {
@@ -54,7 +54,7 @@ module UserManagementOnApi =
 
       let authentifier = Authentifier(tokenExtractor, jwtEncoder)
 
-      let userRepository = ProtoPersist.InMemory.InMemoryRepository.Create<string, User>()
+      let employeeRepository = ProtoPersist.InMemory.InMemoryRepository.Create<string, Employee>()
 
       let nonLogger =
         { new Logging.Logger with
@@ -63,20 +63,20 @@ module UserManagementOnApi =
             member __.logWithAck _ _ = async { return () } }
 
       let suaveTestContext = 
-        Server.mainWebPart authentifier userRepository
+        Server.mainWebPart authentifier employeeRepository
         |> runWith { defaultConfig with logger = nonLogger }
 
       for given in scenario.Given do
         match given with
-        | ``A user already exists`` user ->
-          do! userRepository.Create user.UserName user |> Async.Ignore
+        | ``An employee already exists`` employee ->
+          do! employeeRepository.Create employee.UserName employee |> Async.Ignore
 
       let mutable error = false
       try
         match scenario.When with
-        | ``Create a user`` user ->
-          let userJson = new System.Net.Http.StringContent (toJson user)
-          let statusCode = reqStatusCode POST (Shared.ServerUrls.Users + user.UserName) (Some userJson) suaveTestContext
+        | ``Create an employee`` employee ->
+          let employeeJson = new System.Net.Http.StringContent (toJson employee)
+          let statusCode = reqStatusCode POST (Shared.ServerUrls.Employees + employee.UserName) (Some employeeJson) suaveTestContext
           if statusCode <> System.Net.HttpStatusCode.OK then
             error <- true
        with _ ->
@@ -84,9 +84,9 @@ module UserManagementOnApi =
 
       for ``then`` in scenario.Then do
         match ``then`` with
-        | ``The user exists`` user ->
-          let! user' = userRepository.Read user.UserName
-          Expect.equal user' (Some user) "The user exists"
+        | ``The employee exists`` employee ->
+          let! employee' = employeeRepository.Read employee.UserName
+          Expect.equal employee' (Some employee) "The employee exists"
         | ``There was an error`` ->
           Expect.isTrue error "There was an error"
     }
@@ -95,9 +95,9 @@ module UserManagementOnApi =
       member __.Run(scenario) = run scenario }
 
 let userTests =
-  testList "User management tests" [
-    UserManagement.scenarios |> buildTestsFromScenarios "at repository level" UserManagementOnRepository.runner
-    UserManagement.scenarios |> buildTestsFromScenarios "at API level" UserManagementOnApi.runner
+  testList "Employee management tests" [
+    EmployeeManagement.scenarios |> buildTestsFromScenarios "at repository level" EmployeeManagementOnRepository.runner
+    EmployeeManagement.scenarios |> buildTestsFromScenarios "at API level" EmployeeManagementOnApi.runner
   ]
 
 let tests =

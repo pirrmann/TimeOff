@@ -24,7 +24,7 @@ type AuthSuccess = {
 open Fable.Core
 
 [<Pojo>]
-type User = {
+type Employee = {
   UserName : string
   FirstName: string
   LastName: string

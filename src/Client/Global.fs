@@ -7,7 +7,7 @@ type Page =
   | Home
   | Login
   | Balance of userName:string option
-  | Users
+  | Employees
   | About
 
 let toHash page =
@@ -16,7 +16,7 @@ let toHash page =
   | Login -> "#login"
   | Balance None -> "#balance"
   | Balance (Some userName) -> sprintf "#balance/%s" userName
-  | Users -> "#users"
+  | Employees -> "#employees"
   | Home -> "#home"
 
 type UserData = 
