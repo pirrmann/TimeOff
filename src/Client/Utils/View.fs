@@ -1,6 +1,8 @@
 namespace Client
 
 open System
+open Fable.Core
+open Fable.Core.JsInterop
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 open Fable.Import
@@ -32,3 +34,6 @@ module ViewUtils =
     Notification.notification [ getFulmaNotificationType notification.NotificationType ] [
         div [] [ str notification.Text ]
       ]
+
+  [<Emit("if(typeof $0.getMonth === 'function') { return $0.getFullYear() + '-' + ($0.getMonth() + 1) + '-' + $0.getDate();} else { return $0.substring(0, 4) + '-' + $0.substring(5, 7) + '-' + $0.substring(8, 10);}")>]
+  let toDateString (_: DateTime) = jsNative

@@ -1,5 +1,7 @@
 module Client.Employees.State
 
+open System
+
 open Elmish
 open Types
 open Shared.Types
@@ -16,10 +18,16 @@ let updateEmployeeForm msg model =
     { model with FirstName = firstName }, Cmd.none
   | SetLastName lastName ->
     { model with LastName = lastName }, Cmd.none
+  | SetStartDate startDate ->
+    { model with StartDate = startDate }, Cmd.none
+  | SetMonthlyVacationRate rate ->
+    { model with MonthlyVacationRate = rate }, Cmd.none
   | ActionClicked ->
     let employee: Employee = { UserName = model.UserName
                                FirstName = model.FirstName
-                               LastName = model.LastName }
+                               LastName = model.LastName
+                               StartDate = model.StartDate
+                               MonthlyVacationRate = model.MonthlyVacationRate }
     let restCall = if model.Creating then Rest.createEmployee else Rest.updateEmployee
     model, Cmd.ofPromise (restCall model.UserData.Token) employee EmployeeSaved NetworkError
   | CancelClicked ->
@@ -38,7 +46,9 @@ let update msg model =
                                                          Creating = false
                                                          UserName = employee.UserName
                                                          FirstName = employee.FirstName
-                                                         LastName = employee.LastName } }, []
+                                                         LastName = employee.LastName
+                                                         StartDate = employee.StartDate
+                                                         MonthlyVacationRate = employee.MonthlyVacationRate } }, []
   | NetworkError error ->
     printfn "[Employees.State][Network error] %s" error.Message
     model, Cmd.none
@@ -47,13 +57,17 @@ let update msg model =
                                        Creating = false
                                        UserName = userName
                                        FirstName = null
-                                       LastName = null } }, Cmd.ofMsg (FetchEmployee userName)
+                                       LastName = null
+                                       StartDate = DateTime.Now
+                                       MonthlyVacationRate = 0. } }, Cmd.ofMsg (FetchEmployee userName)
   | CreateNewEmployeeClicked ->
     { model with EmployeeForm = Some { UserData = model.UserData
                                        Creating = true
                                        UserName = null
                                        FirstName = null
-                                       LastName = null } }, Cmd.none
+                                       LastName = null
+                                       StartDate = DateTime.Now
+                                       MonthlyVacationRate = 0. } }, Cmd.none
   | EmployeeFormMsg msg ->
     match model.EmployeeForm with
     | Some employeeFormModel ->

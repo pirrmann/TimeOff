@@ -1,9 +1,12 @@
 module Client.Employees.View
 
+open System
+
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
+open Fable.PowerPack.Date
 open Fulma.Elements
 open Fulma.Elements.Form
 open Fulma.Extra.FontAwesome
@@ -59,6 +62,26 @@ let employeeForm (employeeFormModel: EmployeeFormModel) dispatch =
                                 Input.defaultValue employeeFormModel.LastName
                                 Input.props [
                                   OnChange (fun ev -> dispatch (SetLastName !!ev.target?value)) ] ] ] ]
+
+          Field.field_div [ ]
+            [ Label.label [ ]
+                [ str "Start date" ]
+              Control.control_div [ ]
+                [ Input.input [ Input.typeIsDate
+                                Input.id "start-date"
+                                Input.defaultValue (toDateString employeeFormModel.StartDate)
+                                Input.props [
+                                  OnChange (fun ev -> dispatch (SetStartDate !!ev.target?value)) ] ] ] ]
+
+          Field.field_div [ ]
+            [ Label.label [ ]
+                [ str "Monthly vacation rate" ]
+              Control.control_div [ ]
+                [ Input.input [ Input.typeIsNumber
+                                Input.id "monthly-vacation-rate"
+                                Input.defaultValue (sprintf "%f" employeeFormModel.MonthlyVacationRate)
+                                Input.props [
+                                  OnChange (fun ev -> dispatch (SetMonthlyVacationRate !!ev.target?value)) ] ] ] ]
            
           Field.field_div [ Field.isGrouped ]
             [ Control.control_div [ ]

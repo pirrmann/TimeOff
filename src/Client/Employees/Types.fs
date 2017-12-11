@@ -1,5 +1,6 @@
 module Client.Employees.Types
 
+open System
 open Shared.Types
 open Client
 
@@ -8,13 +9,17 @@ type EmployeeFormModel = {
   Creating: bool
   UserName: string
   FirstName: string
+  StartDate: DateTime
   LastName: string
+  MonthlyVacationRate: float
 }
 
 type EmployeeFormMsg =
   | SetUserName of string
   | SetFirstName of string
   | SetLastName of string
+  | SetStartDate of DateTime
+  | SetMonthlyVacationRate of float
   | ActionClicked
   | CancelClicked
 

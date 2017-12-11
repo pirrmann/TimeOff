@@ -28,6 +28,8 @@ type Employee = {
   UserName : string
   FirstName: string
   LastName: string
+  StartDate: DateTime
+  MonthlyVacationRate: float
 }
 
 [<Pojo>]
